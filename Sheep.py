@@ -6,8 +6,8 @@ class Sheep(Base_object.Base_object):
         super(Sheep,self).__init__(x,y)
         self.frame = 0
         self.image = load_image('llama_walk_0.png')
-        self.goto_x = 400
-        self.goto_y = 400
+        self.goto_x = x
+        self.goto_y = y
 
     def update(self):
         self.x = self.x * 0.95 + self.goto_x * 0.05

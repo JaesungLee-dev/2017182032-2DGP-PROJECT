@@ -2,22 +2,27 @@ from pico2d import *
 import game_framework
 import Cowboy
 import Sheep
+import Wolf
+import game_over_state
 
 name = "MainState"
 
 cowboy = None
 sheep = None
+wolf = None
 dirt_field = None
 
 def enter():
-    global cowboy, sheep, dirt_field
+    global cowboy, sheep, wolf,dirt_field
     cowboy = Cowboy.Cowboy(20,64)
-    sheep = Sheep.Sheep(300,300)
+    sheep = Sheep.Sheep(100,100)
+    wolf = Wolf.Wolf(800,600)
     dirt_field = load_image('Dirt_Field.png')
 
 def exit():
-    global cowboy,sheep,dirt_field
+    global cowboy,sheep,wolf,dirt_field
     del(cowboy)
+    del(wolf)
     del(sheep)
     del(dirt_field)
 
@@ -56,16 +61,28 @@ def handle_events():
 
 def update():
     find_sheep_goto()
+    find_wolf_dest()
     cowboy.update()
     sheep.update()
-
+    wolf.update()
+    collide_check()
 
 def draw():
     clear_canvas()
     dirt_field.draw(400,300)
     cowboy.draw()
     sheep.draw()
+    wolf.draw()
     update_canvas()
+
+def collide_check():
+    global sheep, wolf
+    if(((sheep.x - wolf.x)**2+(sheep.y-wolf.y)**2)**0.5 < 38):
+        game_framework.change_state(game_over_state)
+
+def find_wolf_dest():
+    global sheep, wolf
+    wolf.dest_x, wolf.dest_y = sheep.x,sheep.y
 
 def find_sheep_goto():
     global cowboy,sheep
