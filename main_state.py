@@ -77,7 +77,7 @@ def draw():
 
 def collide_check():
     global sheep, wolf
-    if(((sheep.x - wolf.x)**2+(sheep.y-wolf.y)**2)**0.5 < 38):
+    if(((sheep.x - wolf.x)**2+(sheep.y-wolf.y)**2)**0.5 < 45):
         game_framework.change_state(game_over_state)
 
 def find_wolf_dest():
