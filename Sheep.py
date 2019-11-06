@@ -15,7 +15,6 @@ class Sheep(Base_object.Base_object):
     def update(self):
         self.x = self.x * 0.95 + self.dest_x * 0.05
         self.y = self.y * 0.95 + self.dest_y * 0.05
-
         self.frame = (self.frame + 1) % 4
 
     def draw(self):

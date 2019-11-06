@@ -60,8 +60,8 @@ def handle_events():
 
 
 def update():
-    find_sheep_goto()
-    find_wolf_dest()
+    find_sheep_dest()
+    move_wolf()
     cowboy.update()
     sheep.update()
     wolf.update()
@@ -80,7 +80,7 @@ def collide_check():
     if(((sheep.x - wolf.x)**2+(sheep.y-wolf.y)**2)**0.5 < 45):
         game_framework.change_state(game_over_state)
 
-def find_wolf_dest():
+def move_wolf():
     global sheep, wolf
 
     vector_size = ((sheep.x - wolf.x)**2+(sheep.y - wolf.y)**2)**0.5
@@ -88,7 +88,7 @@ def find_wolf_dest():
     wolf.x += (sheep.x - wolf.x)/vector_size * wolf.speed
     wolf.y += (sheep.y - wolf.y)/vector_size * wolf.speed
 
-def find_sheep_goto():
+def find_sheep_dest():
     global cowboy,sheep
     if(((cowboy.x - sheep.x)**2+(cowboy.y-sheep.y)**2)**0.5 < 100):
         sheep.dest_x += sheep.x - cowboy.x
