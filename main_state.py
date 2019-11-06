@@ -82,22 +82,17 @@ def collide_check():
 
 def find_wolf_dest():
     global sheep, wolf
-    wolf.dest_x, wolf.dest_y = sheep.x,sheep.y
+
+    vector_size = ((sheep.x - wolf.x)**2+(sheep.y - wolf.y)**2)**0.5
+
+    wolf.x += (sheep.x - wolf.x)/vector_size * wolf.speed
+    wolf.y += (sheep.y - wolf.y)/vector_size * wolf.speed
 
 def find_sheep_goto():
     global cowboy,sheep
     if(((cowboy.x - sheep.x)**2+(cowboy.y-sheep.y)**2)**0.5 < 100):
-        sheep.goto_x += sheep.x - cowboy.x
-        sheep.goto_y += sheep.y - cowboy.y
-    if(sheep.goto_x>800):
-        sheep.goto_x = 800
-    if (sheep.goto_x < 0):
-        sheep.goto_x = 0
-    if(sheep.goto_y>600):
-        sheep.goto_y = 600
-    if (sheep.goto_y < 0):
-        sheep.goto_y = 0
+        sheep.dest_x += sheep.x - cowboy.x
+        sheep.dest_y += sheep.y - cowboy.y
 
-
-
-
+    sheep.dest_x = clamp(0, sheep.dest_x , 800)
+    sheep.dest_y = clamp(0,sheep.dest_y,600)
