@@ -3,7 +3,7 @@ import main_state
 import game_framework
 
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
-RUN_SPEED_KMPH = 10.0  # Km / Hour
+RUN_SPEED_KMPH = 20.0  # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -36,9 +36,6 @@ class Sheep():
             self.dest_y += self.y - cowboy.y
             self.move_sheep()
             self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
-
-        else:
-            self.frame = 2
 
         self.dest_x = clamp(0, self.dest_x, 800)
         self.dest_y = clamp(0, self.dest_y, 600)

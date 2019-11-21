@@ -22,16 +22,27 @@ class Wolf():
             Wolf.image = load_image('monster.png')
 
     def update(self):
-        #self.move_wolf()
+        self.find_nearest_sheep()
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
 
     def draw(self):
         self.image.clip_draw(int(self.frame)*80,280,80,56,self.x,self.y)
 
-    def move_wolf(self):
+    def move_wolf(self, i):
         sheep = main_state.get_sheep()
 
-        vector_size = ((sheep.x - self.x) ** 2 + (sheep.y - self.y) ** 2) ** 0.5
+        vector_size = ((sheep[i].x - self.x) ** 2 + (sheep[i].y - self.y) ** 2) ** 0.5
 
-        self.x += (sheep.x - self.x) / vector_size * self.speed * game_framework.frame_time
-        self.y += (sheep.y - self.y) / vector_size * self.speed * game_framework.frame_time
+        self.x += (sheep[i].x - self.x) / vector_size * self.speed * game_framework.frame_time
+        self.y += (sheep[i].y - self.y) / vector_size * self.speed * game_framework.frame_time
+
+    def find_nearest_sheep(self):
+        sheep = main_state.get_sheep()
+        nearest = float("inf")
+        nearest_index = 0
+        for i in range(3):
+            if ((sheep[i].x - self.x) ** 2 + (sheep[i].y - self.y) ** 2) < nearest:
+                nearest = ((sheep[i].x - self.x) ** 2 + (sheep[i].y - self.y) ** 2)
+                nearest_index = i
+        self.move_wolf(nearest_index)
+

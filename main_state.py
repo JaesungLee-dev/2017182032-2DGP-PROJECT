@@ -21,13 +21,13 @@ def enter():
     global cowboy, sheep, wolf, background
     cowboy = Cowboy.Cowboy(20,64)
     sheep = [Sheep.Sheep(random.randint(0,200),200) for i in range(3)]
-    wolf = Wolf.Wolf(800,600)
+    wolf = [Wolf.Wolf(random.randint(600,800),600) for i in range(2)]
     background = Background()
 
     game_world.add_object(background,0)
     game_world.add_object(cowboy, 1)
     game_world.add_objects(sheep, 1)
-    game_world.add_object(wolf, 1)
+    game_world.add_objects(wolf, 1)
 
 def exit():
     game_world.clear()
