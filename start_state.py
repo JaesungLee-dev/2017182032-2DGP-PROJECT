@@ -37,7 +37,6 @@ def draw():
 
 
 def handle_events():
-    events = get_events()
     pass
 
 

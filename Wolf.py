@@ -1,10 +1,10 @@
 from pico2d import*
 import Base_object
 
-class Wolf(Base_object.Base_object):
+class Wolf():
     image = None
     def __init__(self,x,y):
-        super(Wolf,self).__init__(x,y)
+        self.x, self.y = x, y
         self.speed = 3
         self.frame = 0
         if Wolf.image == None:

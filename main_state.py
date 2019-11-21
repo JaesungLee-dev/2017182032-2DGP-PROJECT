@@ -3,6 +3,7 @@ import game_framework
 import Cowboy
 import Sheep
 import Wolf
+import game_world
 import game_over_state
 
 name = "MainState"
@@ -18,13 +19,12 @@ def enter():
     sheep = Sheep.Sheep(100,100)
     wolf = Wolf.Wolf(800,600)
     dirt_field = load_image('Dirt_Field.png')
+    game_world.add_object(cowboy, 1)
+    game_world.add_object(sheep, 1)
+    game_world.add_object(wolf, 1)
 
 def exit():
-    global cowboy,sheep,wolf,dirt_field
-    del(cowboy)
-    del(wolf)
-    del(sheep)
-    del(dirt_field)
+    game_world.clear()
 
 def pause():
     pass
@@ -39,41 +39,25 @@ def handle_events():
     for event in events:
         if event.type == SDL_QUIT:
             game_framework.quit()
-        if event.type == SDL_KEYDOWN:
-            if event.key == SDLK_RIGHT:
-                cowboy.dir += 1
-            if event.key == SDLK_LEFT:
-                cowboy.dir -= 1
-            if event.key == SDLK_UP:
-                cowboy.dir += 3
-            if event.key == SDLK_DOWN:
-                cowboy.dir -= 3
-        if event.type == SDL_KEYUP:
-            if event.key == SDLK_RIGHT:
-                cowboy.dir -= 1
-            if event.key == SDLK_LEFT:
-                cowboy.dir += 1
-            if event.key == SDLK_UP:
-                cowboy.dir -= 3
-            if event.key == SDLK_DOWN:
-                cowboy.dir += 3
+        else:
+            cowboy.handle_event(event)
 
 
 def update():
-    find_sheep_dest()
     move_wolf()
-    cowboy.update()
-    sheep.update()
-    wolf.update()
-    collide_check()
+    find_sheep_dest()
+
+    for game_object in game_world.all_objects():
+        game_object.update()
+    #collide_check()
 
 def draw():
     clear_canvas()
-    dirt_field.draw(400,300)
-    cowboy.draw()
-    sheep.draw()
-    wolf.draw()
+    dirt_field.draw()
+    for game_object in game_world.all_objects():
+        game_object.draw()
     update_canvas()
+
 
 def collide_check():
     global sheep, wolf
@@ -90,7 +74,7 @@ def move_wolf():
 
 def find_sheep_dest():
     global cowboy,sheep
-    if(((cowboy.x - sheep.x)**2+(cowboy.y-sheep.y)**2)**0.5 < 100):
+    if((cowboy.x - sheep.x)**2+(cowboy.y-sheep.y)**2< 10000):
         sheep.dest_x += sheep.x - cowboy.x
         sheep.dest_y += sheep.y - cowboy.y
 

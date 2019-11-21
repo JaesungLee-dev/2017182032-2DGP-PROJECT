@@ -1,11 +1,10 @@
 from pico2d import*
 import Base_object
 
-class Sheep(Base_object.Base_object):
+class Sheep():
     image = None
-
     def __init__(self,x,y):
-        super(Sheep,self).__init__(x,y)
+        self.x, self.y = x, y
         self.frame = 0
         self.dest_x = x
         self.dest_y = y
