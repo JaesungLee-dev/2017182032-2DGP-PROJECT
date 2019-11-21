@@ -1,5 +1,4 @@
 from pico2d import*
-import Base_object
 
 dir_to_action_table = {
     1: 9, -1: 8, 3: 4, -3: 0, 2: 3, 4: 5, -4: 1, -2: 7

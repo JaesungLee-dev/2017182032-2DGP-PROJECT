@@ -1,5 +1,4 @@
 from pico2d import*
-import Base_object
 
 class Wolf():
     image = None

@@ -3,6 +3,7 @@ import game_framework
 import Cowboy
 import Sheep
 import Wolf
+from Background import Background
 import game_world
 import game_over_state
 
@@ -11,14 +12,16 @@ name = "MainState"
 cowboy = None
 sheep = None
 wolf = None
-dirt_field = None
+background = None
 
 def enter():
-    global cowboy, sheep, wolf,dirt_field
+    global cowboy, sheep, wolf, background
     cowboy = Cowboy.Cowboy(20,64)
     sheep = Sheep.Sheep(100,100)
     wolf = Wolf.Wolf(800,600)
-    dirt_field = load_image('Dirt_Field.png')
+    background = Background()
+
+    game_world.add_object(background,0)
     game_world.add_object(cowboy, 1)
     game_world.add_object(sheep, 1)
     game_world.add_object(wolf, 1)
@@ -28,7 +31,6 @@ def exit():
 
 def pause():
     pass
-
 
 def resume():
     pass
@@ -53,7 +55,6 @@ def update():
 
 def draw():
     clear_canvas()
-    dirt_field.draw()
     for game_object in game_world.all_objects():
         game_object.draw()
     update_canvas()
