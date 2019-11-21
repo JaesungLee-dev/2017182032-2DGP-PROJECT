@@ -1,4 +1,16 @@
 from pico2d import*
+import game_framework
+import main_state
+
+PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
+RUN_SPEED_KMPH = 20.0  # Km / Hour
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+TIME_PER_ACTION = 0.5
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAMES_PER_ACTION = 8
 
 dir_to_action_table = {
     1: 9, -1: 8, 3: 4, -3: 0, 2: 3, 4: 5, -4: 1, -2: 7
@@ -42,8 +54,8 @@ class IdleState:
         cowboy.frame = 0
     @staticmethod
     def draw(cowboy):
-        cowboy.image.clip_draw(cowboy.frame * 128, cowboy.action * 128, 128, 128, cowboy.x, cowboy.y)
-        delay(0.03)
+        cowboy.image.clip_draw(int(cowboy.frame) * 128, cowboy.action * 128, 128, 128, cowboy.x, cowboy.y)
+        #delay(0.01)
 
 class RunState:
     @staticmethod
@@ -57,14 +69,13 @@ class RunState:
     def do(cowboy):
         if (cowboy.dir == 0):
             cowboy.add_event(NO_DIR)
-            #cowboy.curr_state = IdleState
-        cowboy.frame = (cowboy.frame + 1) % 8
+        cowboy.frame = (cowboy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
         #cowboy.x = clamp(25, cowboy.x, 800 - 25)
         RunState.move_by_dir(cowboy)
     @staticmethod
     def draw(cowboy):
-        cowboy.image.clip_draw(cowboy.frame * 128, cowboy.action * 128, 128, 128, cowboy.x, cowboy.y)
-        delay(0.03)
+        cowboy.image.clip_draw(int(cowboy.frame) * 128, cowboy.action * 128, 128, 128, cowboy.x, cowboy.y)
+        #delay(0.01)
 
     def move(cowboy,a,b):
         cowboy.x += a
@@ -72,21 +83,21 @@ class RunState:
 
     def move_by_dir(cowboy):
         if cowboy.dir == 1:
-            RunState.move(cowboy,cowboy.speed, 0)
+            RunState.move(cowboy,RUN_SPEED_PPS * game_framework.frame_time , 0)
         if cowboy.dir == -1:
-            RunState.move(cowboy,-1 * cowboy.speed, 0)
+            RunState.move(cowboy,-1 * RUN_SPEED_PPS* game_framework.frame_time, 0)
         if cowboy.dir == 3:
-            RunState.move(cowboy,0, 1 * cowboy.speed)
+            RunState.move(cowboy,0, 1 * RUN_SPEED_PPS* game_framework.frame_time)
         if cowboy.dir == -3:
-            RunState.move(cowboy,0, -1 * cowboy.speed)
+            RunState.move(cowboy,0, -1 * RUN_SPEED_PPS* game_framework.frame_time)
         if cowboy.dir == 2:
-            RunState.move(cowboy,-1 * cowboy.speed / 2**0.5, cowboy.speed / 2**0.5)
+            RunState.move(cowboy,-1 * RUN_SPEED_PPS / 2**0.5* game_framework.frame_time, RUN_SPEED_PPS / 2**0.5* game_framework.frame_time)
         if cowboy.dir == 4:
-            RunState.move(cowboy,cowboy.speed / 2**0.5, cowboy.speed / 2**0.5)
+            RunState.move(cowboy,RUN_SPEED_PPS / 2**0.5* game_framework.frame_time, RUN_SPEED_PPS / 2**0.5* game_framework.frame_time)
         if cowboy.dir == -4:
-            RunState.move(cowboy,-1 * cowboy.speed / 2**0.5, -1 * cowboy.speed / 2**0.5)
+            RunState.move(cowboy,-1 * RUN_SPEED_PPS / 2**0.5* game_framework.frame_time, -1 * RUN_SPEED_PPS / 2**0.5* game_framework.frame_time)
         if cowboy.dir == -2:
-            RunState.move(cowboy,cowboy.speed / 2**0.5, -1 * cowboy.speed / 2**0.5)
+            RunState.move(cowboy,RUN_SPEED_PPS / 2**0.5* game_framework.frame_time, -1 * RUN_SPEED_PPS / 2**0.5* game_framework.frame_time)
 
 next_state_table = {
     IdleState:
@@ -144,5 +155,4 @@ class Cowboy():
                 self.action = dir_to_action_table[self.dir]
             else:
                 self.action = dir_to_action_table[prev_dir]
-
             self.add_event(key_event)
