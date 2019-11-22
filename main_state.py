@@ -11,23 +11,23 @@ import random
 name = "MainState"
 
 cowboy = None
-sheep = None
-wolf = None
+sheeps = None
+wolfs = None
 background = None
 
 moving_sheep = True
 
 def enter():
-    global cowboy, sheep, wolf, background
+    global cowboy, sheeps, wolfs, background
     cowboy = Cowboy.Cowboy(20,64)
-    sheep = [Sheep.Sheep(random.randint(0,200),200) for i in range(3)]
-    wolf = [Wolf.Wolf(random.randint(600,800),600) for i in range(2)]
+    sheeps = [Sheep.Sheep(random.randint(0, 200), 200) for i in range(3)]
+    wolfs = [Wolf.Wolf(random.randint(600, 800), 600) for i in range(2)]
     background = Background()
 
     game_world.add_object(background,0)
     game_world.add_object(cowboy, 1)
-    game_world.add_objects(sheep, 1)
-    game_world.add_objects(wolf, 1)
+    game_world.add_objects(sheeps, 1)
+    game_world.add_objects(wolfs, 1)
 
 def exit():
     game_world.clear()
@@ -58,7 +58,14 @@ def handle_events():
 def update():
     for game_object in game_world.all_objects():
         game_object.update()
-    #collide_check()
+
+    for wolf in wolfs:
+        for sheep in sheeps:
+            if collide(wolf, sheep):
+                sheeps.remove(sheep)
+                game_world.remove_object(sheep)
+
+
 
 def draw():
     clear_canvas()
@@ -67,14 +74,18 @@ def draw():
     update_canvas()
 
 def get_cowboy():
-    global cowboy
     return cowboy
 
-def get_sheep():
-    global sheep
-    return sheep
+def get_sheeps():
+    return sheeps
 
-def collide_check():
-    global sheep, wolf
-    if(((sheep.x - wolf.x)**2+(sheep.y-wolf.y)**2)**0.5 < 45):
-        game_framework.change_state(game_over_state)
+def collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+
+    return True

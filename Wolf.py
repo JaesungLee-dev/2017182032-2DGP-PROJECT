@@ -1,6 +1,9 @@
 from pico2d import*
 import main_state
 import game_framework
+import random
+from BehaviorTree import BehaviorTree, SelectorNode, SequenceNode, LeafNode
+
 
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
 RUN_SPEED_KMPH = 10.0  # Km / Hour
@@ -20,29 +23,59 @@ class Wolf():
         self.frame = 0
         if Wolf.image == None:
             Wolf.image = load_image('monster.png')
+        self.target_x, self.target_y = None, None
+        self.dir = random.random() * 2 * math.pi
+
+        self.build_behavior_tree()
+
+    def get_bb(self):
+        return self.x - 25, self.y - 25, self.x + 32, self.y + 19
 
     def update(self):
-        self.find_nearest_sheep()
-        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
+        self.bt.run()
 
     def draw(self):
-        self.image.clip_draw(int(self.frame)*80,280,80,56,self.x,self.y)
+        draw_rectangle(*self.get_bb())
+        if math.cos(self.dir) < 0:
+            self.image.clip_draw(int(self.frame) * 80, 280, 80, 56, self.x, self.y)
+        else:
+            self.image.clip_composite_draw(int(self.frame)*80,280,80,56,3.141592 * 2,'h',self.x,self.y,80,56)
 
-    def move_wolf(self, i):
-        sheep = main_state.get_sheep()
+    def move_wolf(self):
+        self.speed = RUN_SPEED_PPS
+        self.calculate_current_position()
 
-        vector_size = ((sheep[i].x - self.x) ** 2 + (sheep[i].y - self.y) ** 2) ** 0.5
+        return BehaviorTree.SUCCESS
 
-        self.x += (sheep[i].x - self.x) / vector_size * self.speed * game_framework.frame_time
-        self.y += (sheep[i].y - self.y) / vector_size * self.speed * game_framework.frame_time
+    def calculate_current_position(self):
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
+        self.x += self.speed * math.cos(self.dir) * game_framework.frame_time
+        self.y += self.speed * math.sin(self.dir) * game_framework.frame_time
+        self.x = clamp(50, self.x, 1280 - 50)
+        self.y = clamp(50, self.y, 1024 - 50)
 
     def find_nearest_sheep(self):
-        sheep = main_state.get_sheep()
+        sheeps = main_state.get_sheeps()
+        if len(sheeps) == 0:
+            self.speed = 0
+            return BehaviorTree.FAIL
         nearest = float("inf")
-        nearest_index = 0
-        for i in range(3):
-            if ((sheep[i].x - self.x) ** 2 + (sheep[i].y - self.y) ** 2) < nearest:
-                nearest = ((sheep[i].x - self.x) ** 2 + (sheep[i].y - self.y) ** 2)
-                nearest_index = i
-        self.move_wolf(nearest_index)
+        nearest_sheep = None
+        for sheep in sheeps:
+            if ((sheep.x - self.x) ** 2 + (sheep.y - self.y) ** 2) < nearest:
+                nearest = ((sheep.x - self.x) ** 2 + (sheep.y - self.y) ** 2)
+                nearest_sheep = sheep
 
+        self.target_x, self.target_y = nearest_sheep.x, nearest_sheep.y
+        self.dir = math.atan2(self.target_y - self.y, self.target_x - self.x)
+
+        return BehaviorTree.SUCCESS
+
+    def build_behavior_tree(self):
+        find_nearest_sheep = LeafNode("find_nearest_sheep",self.find_nearest_sheep)
+        move_wolf = LeafNode("move_wolf",self.move_wolf)
+
+        chase_sheep = SequenceNode("chase_sheep")
+        chase_sheep.add_children(find_nearest_sheep,move_wolf)
+
+        self.bt = BehaviorTree(chase_sheep)

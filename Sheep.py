@@ -1,6 +1,8 @@
 from pico2d import*
 import main_state
 import game_framework
+import random
+from BehaviorTree import BehaviorTree, SelectorNode, SequenceNode, LeafNode
 
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
 RUN_SPEED_KMPH = 20.0  # Km / Hour
@@ -17,8 +19,9 @@ class Sheep():
     def __init__(self,x,y):
         self.x, self.y = x, y
         self.frame = 0
-        self.speed = RUN_SPEED_PPS
-        self.dest_x, self.dest_y = x, y
+        self.speed = 0
+        self.dir = random.random() * 2 * math.pi
+        self.target_x, self.target_y = x, y
         if Sheep.image == None:
             Sheep.image = load_image('llama_walk_0.png')
 
@@ -26,26 +29,40 @@ class Sheep():
         self.find_sheep_dest()
 
     def draw(self):
-        self.image.clip_draw(int(self.frame) * 128,0,128,128,self.x,self.y)
+        draw_rectangle(*self.get_bb())
+        if math.cos(self.dir) < 0:
+            self.image.clip_draw(int(self.frame) * 128, 0, 128, 128, self.x, self.y)
+        else:
+            self.image.clip_composite_draw(int(self.frame) * 128, 0, 128, 128,3.141592 * 2,'h',self.x,self.y,128, 128)
+
+
+    def get_bb(self):
+        return self.x - 25, self.y - 30, self.x + 25, self.y + 35
 
     def find_sheep_dest(self):
         cowboy = main_state.get_cowboy()
 
         if ((cowboy.x - self.x) ** 2 + (cowboy.y - self.y) ** 2 < 10000):
-            self.dest_x += self.x - cowboy.x
-            self.dest_y += self.y - cowboy.y
-            self.move_sheep()
-            self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
+            self.target_x += self.x - cowboy.x
+            self.target_y += self.y - cowboy.y
 
-        self.dest_x = clamp(0, self.dest_x, 800)
-        self.dest_y = clamp(0, self.dest_y, 600)
+            self.target_x = clamp(30, self.target_x, 800)
+            self.target_y = clamp(30, self.target_y, 600)
+
+            self.dir = math.atan2(self.target_y - self.y, self.target_x - self.x)
+            self.move_sheep()
+            return BehaviorTree.SUCCESS
+
+        self.speed = 0
+        return BehaviorTree.FAIL
+
+    def calculate_current_position(self):
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
+        self.x += self.speed * math.cos(self.dir) * game_framework.frame_time
+        self.y += self.speed * math.sin(self.dir) * game_framework.frame_time
+        self.x = clamp(30, self.x, 800)
+        self.y = clamp(30, self.y, 600)
 
     def move_sheep(self):
-        vector_size = ((self.x - self.dest_x) ** 2 + (self.y - self.dest_y) ** 2) ** 0.5
-
-        if(vector_size >= 80):
-            self.x += (self.dest_x - self.x) / vector_size * self.speed * game_framework.frame_time
-            self.y += (self.dest_y - self.y) / vector_size * self.speed * game_framework.frame_time
-
-        self.x = clamp(0, self.x, 800)
-        self.y = clamp(0, self.y, 600)
+        self.speed = RUN_SPEED_PPS
+        self.calculate_current_position()
