@@ -22,14 +22,13 @@ class Sheep():
         self.speed = 0
         self.dir = random.random() * 2 * math.pi
         self.target_x, self.target_y = x, y
-        
+
         self.build_behavior_tree()
 
         if Sheep.image == None:
             Sheep.image = load_image('llama_walk_0.png')
 
     def update(self):
-        #self.find_sheep_dest()
         self.bt.run()
 
     def draw(self):
@@ -54,7 +53,6 @@ class Sheep():
             self.target_y = clamp(30, self.target_y, 600)
 
             self.dir = math.atan2(self.target_y - self.y, self.target_x - self.x)
-            #self.move_sheep()
             return BehaviorTree.SUCCESS
 
         self.speed = 0
