@@ -17,8 +17,8 @@ FRAMES_PER_ACTION = 4
 
 class Wolf():
     image = None
-    def __init__(self,x,y):
-        self.x, self.y = x, y
+    def __init__(self):
+        self.x, self.y = random.randint(600,800), random.randint(0,600)
         self.speed = RUN_SPEED_PPS
         self.frame = 0
         if Wolf.image == None:

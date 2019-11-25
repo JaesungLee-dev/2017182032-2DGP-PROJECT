@@ -1,15 +1,13 @@
 from pico2d import *
 import game_framework
-import Cowboy
-import Sheep
-import Wolf
+from Cowboy import Cowboy
+from Sheep import Sheep
+from Wolf import Wolf
 from Background import Background
 from House import House
 import game_world
 import game_over_state
 import game_clear_state
-import random
-
 
 name = "MainState"
 
@@ -29,9 +27,9 @@ def enter():
     safe_sheeps = 0
 
     house = House()
-    cowboy = Cowboy.Cowboy(20,64)
-    sheeps = [Sheep.Sheep(random.randint(0, 200), 200) for i in range(3)]
-    wolfs = [Wolf.Wolf(random.randint(600, 800), 600) for i in range(2)]
+    cowboy = Cowboy(20,64)
+    sheeps = [Sheep() for i in range(3)]
+    wolfs = [Wolf() for i in range(2)]
     background = Background()
 
     game_world.add_object(background,0)
@@ -67,7 +65,7 @@ def handle_events():
 
 
 def update():
-    global game_clear, safe_sheeps
+    global game_clear, safe_sheeps, house
     for game_object in game_world.all_objects():
         game_object.update()
 
@@ -78,11 +76,17 @@ def update():
                 game_world.remove_object(sheep)
 
     for sheep in sheeps:
-        if sheep.x > 800:
+        if collide(sheep, house):
             sheeps.remove(sheep)
             game_world.remove_object(sheep)
             game_clear = True
             safe_sheeps += 1
+
+    for bullet in game_world.objects[2]:
+        for wolf in wolfs:
+            if collide(wolf, bullet):
+                wolfs.remove(wolf)
+                game_world.remove_object(wolf)
 
     if len(sheeps) ==0:
         if game_clear == True:

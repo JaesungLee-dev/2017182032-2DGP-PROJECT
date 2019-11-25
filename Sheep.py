@@ -16,12 +16,12 @@ FRAMES_PER_ACTION = 4
 
 class Sheep():
     image = None
-    def __init__(self,x,y):
-        self.x, self.y = x, y
+    def __init__(self):
+        self.x, self.y = random.randint(0, 200), random.randint(100, 200)
         self.frame = 0
         self.speed = 0
         self.dir = random.random() * 2 * math.pi
-        self.target_x, self.target_y = x, y
+        self.target_x, self.target_y = self.x, self.y
 
         self.build_behavior_tree()
 
@@ -48,7 +48,7 @@ class Sheep():
             self.target_x += self.x - cowboy.x
             self.target_y += self.y - cowboy.y
 
-            self.target_x = clamp(30, self.target_x, 900)
+            self.target_x = clamp(30, self.target_x, 800)
             self.target_y = clamp(30, self.target_y, 600)
 
             self.dir = math.atan2(self.target_y - self.y, self.target_x - self.x)
@@ -61,7 +61,7 @@ class Sheep():
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
         self.x += self.speed * math.cos(self.dir) * game_framework.frame_time
         self.y += self.speed * math.sin(self.dir) * game_framework.frame_time
-        self.x = clamp(30, self.x, 900)
+        self.x = clamp(30, self.x, 800)
         self.y = clamp(30, self.y, 600)
 
     def move_sheep(self):
