@@ -1,5 +1,6 @@
 import game_framework
 from pico2d import *
+import start_state
 
 
 name = "gameover"
@@ -40,7 +41,7 @@ def handle_events():
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
-            game_framework.quit()
+            game_framework.change_state(start_state)
 
 
 def pause(): pass
