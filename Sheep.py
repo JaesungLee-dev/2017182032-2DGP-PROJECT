@@ -38,7 +38,6 @@ class Sheep():
         else:
             self.image.clip_composite_draw(int(self.frame) * 128, 0, 128, 128,3.141592 * 2,'h',self.x,self.y,128, 128)
 
-
     def get_bb(self):
         return self.x - 25, self.y - 30, self.x + 25, self.y + 35
 
@@ -49,7 +48,7 @@ class Sheep():
             self.target_x += self.x - cowboy.x
             self.target_y += self.y - cowboy.y
 
-            self.target_x = clamp(30, self.target_x, 800)
+            self.target_x = clamp(30, self.target_x, 900)
             self.target_y = clamp(30, self.target_y, 600)
 
             self.dir = math.atan2(self.target_y - self.y, self.target_x - self.x)
@@ -62,7 +61,7 @@ class Sheep():
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
         self.x += self.speed * math.cos(self.dir) * game_framework.frame_time
         self.y += self.speed * math.sin(self.dir) * game_framework.frame_time
-        self.x = clamp(30, self.x, 800)
+        self.x = clamp(30, self.x, 900)
         self.y = clamp(30, self.y, 600)
 
     def move_sheep(self):
@@ -75,6 +74,6 @@ class Sheep():
         move_sheep = LeafNode("move_sheep",self.move_sheep)
 
         move_to_destination = SequenceNode("move_to_destination")
-        move_to_destination.add_children(find_sheep_dest,move_sheep)
+        move_to_destination.add_children(find_sheep_dest, move_sheep)
 
         self.bt = BehaviorTree(move_to_destination)

@@ -4,9 +4,12 @@ import Cowboy
 import Sheep
 import Wolf
 from Background import Background
+from House import House
 import game_world
 import game_over_state
+import game_clear_state
 import random
+
 
 name = "MainState"
 
@@ -14,17 +17,25 @@ cowboy = None
 sheeps = None
 wolfs = None
 background = None
+house = None
+game_clear = None
+safe_sheeps = None
 
 moving_sheep = True
 
 def enter():
-    global cowboy, sheeps, wolfs, background
+    global cowboy, sheeps, wolfs, background,house, game_clear, safe_sheeps
+    game_clear = False
+    safe_sheeps = 0
+
+    house = House()
     cowboy = Cowboy.Cowboy(20,64)
     sheeps = [Sheep.Sheep(random.randint(0, 200), 200) for i in range(3)]
     wolfs = [Wolf.Wolf(random.randint(600, 800), 600) for i in range(2)]
     background = Background()
 
     game_world.add_object(background,0)
+    game_world.add_object(house,0)
     game_world.add_object(cowboy, 1)
     game_world.add_objects(sheeps, 1)
     game_world.add_objects(wolfs, 1)
@@ -56,6 +67,7 @@ def handle_events():
 
 
 def update():
+    global game_clear, safe_sheeps
     for game_object in game_world.all_objects():
         game_object.update()
 
@@ -65,6 +77,18 @@ def update():
                 sheeps.remove(sheep)
                 game_world.remove_object(sheep)
 
+    for sheep in sheeps:
+        if sheep.x > 800:
+            sheeps.remove(sheep)
+            game_world.remove_object(sheep)
+            game_clear = True
+            safe_sheeps += 1
+
+    if len(sheeps) ==0:
+        if game_clear == True:
+            game_framework.change_state(game_clear_state)
+        else:
+            game_framework.change_state(game_over_state)
 
 
 def draw():
