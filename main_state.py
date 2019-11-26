@@ -29,7 +29,7 @@ def enter():
     house = House()
     cowboy = Cowboy(20,64)
     sheeps = [Sheep() for i in range(3)]
-    wolfs = [Wolf() for i in range(2)]
+    wolfs = [Wolf() for i in range(5)]
     background = Background()
 
     game_world.add_object(background,0)

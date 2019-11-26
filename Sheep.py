@@ -17,7 +17,7 @@ FRAMES_PER_ACTION = 4
 class Sheep():
     image = None
     def __init__(self):
-        self.x, self.y = random.randint(0, 200), random.randint(100, 200)
+        self.x, self.y = random.randint(0, 200), random.randint(10, 500)
         self.frame = 0
         self.speed = 0
         self.dir = random.random() * 2 * math.pi

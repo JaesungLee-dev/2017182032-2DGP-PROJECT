@@ -15,5 +15,4 @@ class House():
         draw_rectangle(*self.get_bb())
 
     def draw(self):
-        draw_rectangle(*self.get_bb())
         self.image.draw(self.x,self.y,200,200)
