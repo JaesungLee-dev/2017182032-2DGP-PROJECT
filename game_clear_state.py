@@ -40,10 +40,6 @@ def draw():
         image.clip_draw(250, 400, 190, 210, 400, 350, 100, 100)
         image.clip_draw(250, 400, 190, 210, 500, 300, 100, 100)
 
-    #image.clip_draw(420,100,160,160,300,300,100,100)
-    #image.clip_draw(250,400,190,210,300,300,100,100)
-    #image.clip_draw(250, 400, 190, 210, 400, 350, 100, 100)
-    #image.clip_draw(250, 400, 190, 210, 500, 300, 100, 100)
     update_canvas()
 
 def handle_events():

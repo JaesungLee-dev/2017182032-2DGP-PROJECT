@@ -100,7 +100,7 @@ def draw():
     clear_canvas()
     for game_object in game_world.all_objects():
         game_object.draw()
-        game_object.draw_hitbox()
+        #game_object.draw_hitbox()
     update_canvas()
 
 def get_cowboy():
