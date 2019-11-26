@@ -86,6 +86,7 @@ def update():
         for wolf in wolfs:
             if collide(wolf, bullet):
                 wolfs.remove(wolf)
+                game_world.remove_object(bullet)
                 game_world.remove_object(wolf)
 
     if len(sheeps) ==0:
@@ -99,6 +100,7 @@ def draw():
     clear_canvas()
     for game_object in game_world.all_objects():
         game_object.draw()
+        game_object.draw_hitbox()
     update_canvas()
 
 def get_cowboy():

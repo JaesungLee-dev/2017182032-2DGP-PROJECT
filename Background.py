@@ -7,5 +7,8 @@ class Background():
     def update(self):
         pass
 
+    def draw_hitbox(self):
+        pass
+
     def draw(self):
         self.image.draw(400,300)

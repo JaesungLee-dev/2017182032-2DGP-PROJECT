@@ -15,8 +15,10 @@ class Bullet:
             Bullet.image = load_image('bullet.png')
         self.x, self.y, self.dir = x, y, direction
     def draw(self):
-        draw_rectangle(*self.get_bb())
         self.image.draw(self.x, self.y,60,60)
+
+    def draw_hitbox(self):
+        draw_rectangle(*self.get_bb())
 
     def update(self):
         self.move_by_dir()

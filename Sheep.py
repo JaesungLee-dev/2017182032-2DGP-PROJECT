@@ -31,8 +31,10 @@ class Sheep():
     def update(self):
         self.bt.run()
 
-    def draw(self):
+    def draw_hitbox(self):
         draw_rectangle(*self.get_bb())
+
+    def draw(self):
         if math.cos(self.dir) > 0:
             self.image.clip_draw(int(self.frame) * 128, 0, 128, 128, self.x, self.y)
         else:

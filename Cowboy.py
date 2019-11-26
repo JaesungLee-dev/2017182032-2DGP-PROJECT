@@ -136,6 +136,12 @@ class Cowboy():
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
 
+    def get_bb(self):
+        return self.x - 32, self.y - 64, self.x + 32, self.y + 36
+
+    def draw_hitbox(self):
+        draw_rectangle(*self.get_bb())
+
     def update(self):
         self.cur_state.do(self)
         if len(self.event_que) > 0:
