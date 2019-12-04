@@ -16,6 +16,3 @@ class House():
 
     def draw(self):
         self.image.draw(self.x,self.y,200,200)
-
-    def dd(self):
-        pass
