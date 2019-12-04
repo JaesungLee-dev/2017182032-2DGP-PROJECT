@@ -11,4 +11,4 @@ class Background():
         pass
 
     def draw(self):
-        self.image.draw(400,300)
+        self.image.draw(1280//2,800//2,1280,800)

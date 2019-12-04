@@ -22,7 +22,7 @@ class Bullet:
 
     def update(self):
         self.move_by_dir()
-        if self.x < 0 or self.x > 800 or self.y > 600 or self.y < 0:
+        if self.x < 0 or self.x > 1280 or self.y > 800 or self.y < 0:
             game_world.remove_object(self)
 
     def move(self,a,b):

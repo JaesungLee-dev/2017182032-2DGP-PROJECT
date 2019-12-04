@@ -18,8 +18,9 @@ FRAMES_PER_ACTION = 4
 class Wolf():
     image = None
     def __init__(self):
-        self.x, self.y = random.randint(600,800), random.randint(0,600)
+        self.x, self.y = random.randint(600,1280), random.randint(0,800)
         self.speed = RUN_SPEED_PPS
+        self.timer = 0
         self.frame = 0
         if Wolf.image == None:
             Wolf.image = load_image('monster.png')
@@ -54,19 +55,29 @@ class Wolf():
         self.x += self.speed * math.cos(self.dir) * game_framework.frame_time
         self.y += self.speed * math.sin(self.dir) * game_framework.frame_time
         self.x = clamp(50, self.x, 1280 - 50)
-        self.y = clamp(50, self.y, 1024 - 50)
+        self.y = clamp(50, self.y, 800 - 50)
+
+    def wander(self):
+        self.speed = RUN_SPEED_PPS
+        self.calculate_current_position()
+        self.timer -= game_framework.frame_time
+        if self.timer < 0:
+            self.timer += 1.0
+            self.dir = random.random() * 2 * math.pi
+        return BehaviorTree.SUCCESS
 
     def find_nearest_sheep(self):
         sheeps = main_state.get_sheeps()
-        if len(sheeps) == 0:
-            self.speed = 0
-            return BehaviorTree.FAIL
+
         nearest = float("inf")
         nearest_sheep = None
         for sheep in sheeps:
             if ((sheep.x - self.x) ** 2 + (sheep.y - self.y) ** 2) < nearest:
                 nearest = ((sheep.x - self.x) ** 2 + (sheep.y - self.y) ** 2)
                 nearest_sheep = sheep
+
+        #if (nearest_sheep.x - self.x) ** 2 + (nearest_sheep.y - self.y) ** 2 > 90000:
+            #return BehaviorTree.FAIL
 
         self.target_x, self.target_y = nearest_sheep.x, nearest_sheep.y
         self.dir = math.atan2(self.target_y - self.y, self.target_x - self.x)
@@ -79,5 +90,11 @@ class Wolf():
 
         chase_sheep = SequenceNode("chase_sheep")
         chase_sheep.add_children(find_nearest_sheep,move_wolf)
+
+        #wander = LeafNode("wander",self.wander)
+
+        #wanderNchase = SelectorNode("wander and chase")
+        #wanderNchase.add_children(chase_sheep,wander)
+        #wanderNchase.add_child(wander)
 
         self.bt = BehaviorTree(chase_sheep)

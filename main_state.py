@@ -29,7 +29,7 @@ def enter():
     house = House()
     cowboy = Cowboy(20,64)
     sheeps = [Sheep() for i in range(3)]
-    wolfs = [Wolf() for i in range(5)]
+    wolfs = [Wolf() for i in range(8)]
     background = Background()
 
     game_world.add_object(background,0)
@@ -70,6 +70,8 @@ def update():
         game_object.update()
 
     for wolf in wolfs:
+        if collide(wolf,cowboy):
+            game_framework.change_state(game_over_state)
         for sheep in sheeps:
             if collide(wolf, sheep):
                 sheeps.remove(sheep)
@@ -83,11 +85,18 @@ def update():
             safe_sheeps += 1
 
     for bullet in game_world.objects[2]:
-        for wolf in wolfs:
-            if collide(wolf, bullet):
-                wolfs.remove(wolf)
-                game_world.remove_object(bullet)
-                game_world.remove_object(wolf)
+        for animal in game_world.objects[1]:
+            if isinstance(animal,Wolf):
+                if collide(animal, bullet):
+                    wolfs.remove(animal)
+                    game_world.remove_object(bullet)
+                    game_world.remove_object(animal)
+            if isinstance(animal,Sheep):
+                if collide(animal, bullet):
+                    sheeps.remove(animal)
+                    game_world.remove_object(bullet)
+                    game_world.remove_object(animal)
+
 
     if len(sheeps) ==0:
         if game_clear == True:

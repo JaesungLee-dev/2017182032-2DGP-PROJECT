@@ -2,7 +2,7 @@ from pico2d import*
 
 class House():
     def __init__(self):
-        self.x, self.y = 750, 550
+        self.x, self.y = 1180, 700
         self.image = load_image('House.png')
 
     def update(self):

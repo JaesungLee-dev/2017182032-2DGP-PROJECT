@@ -30,8 +30,8 @@ def update():
 def draw():
     global image
     clear_canvas()
-    background_image.draw(400,300)
-    image.draw(400,300)
+    background_image.draw(640,400,1280,800)
+    image.draw(640,400,400,300)
     update_canvas()
 
 

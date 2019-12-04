@@ -25,20 +25,20 @@ def draw():
     global image, background_image
     clear_canvas()
 
-    background_image.draw(400,300)
+    background_image.draw(640,400,1280,800)
 
     if main_state.safe_sheeps == 1:
-        image.clip_draw(250,400,190,210,300,300,100,100)
-        image.clip_draw(420, 100, 160, 160, 400, 350, 100, 100)
-        image.clip_draw(420, 100, 160, 160, 500, 300, 100, 100)
+        image.clip_draw(250,400,190,210,540,400,100,100)
+        image.clip_draw(420, 100, 160, 160, 640, 450, 100, 100)
+        image.clip_draw(420, 100, 160, 160,  740, 400, 100, 100)
     elif main_state.safe_sheeps == 2:
-        image.clip_draw(250,400,190,210,300,300,100,100)
-        image.clip_draw(250,400,190,210,400,350,100,100)
-        image.clip_draw(420, 100, 160, 160, 500, 300, 100, 100)
+        image.clip_draw(250,400,190,210,540,400,100,100)
+        image.clip_draw(250,400,190,210, 640, 450, 100, 100)
+        image.clip_draw(420, 100, 160, 160,  740, 400, 100, 100)
     else:
-        image.clip_draw(250,400,190,210,300,300,100,100)
-        image.clip_draw(250, 400, 190, 210, 400, 350, 100, 100)
-        image.clip_draw(250, 400, 190, 210, 500, 300, 100, 100)
+        image.clip_draw(250,400,190,210,540,400,100,100)
+        image.clip_draw(250, 400, 190, 210, 640, 450, 100, 100)
+        image.clip_draw(250, 400, 190, 210, 740, 400, 100, 100)
 
     update_canvas()
 

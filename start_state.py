@@ -1,5 +1,6 @@
 import game_framework
 from pico2d import *
+import game_clear_state
 
 import main_state
 
@@ -32,7 +33,7 @@ def update():
 def draw():
     global image
     clear_canvas()
-    image.draw(400,300)
+    image.draw(640,400,1280,800)
     update_canvas()
 
 
