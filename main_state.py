@@ -40,6 +40,7 @@ def enter():
 
 def exit():
     game_world.clear()
+    g = 5
 
 def pause():
     pass
