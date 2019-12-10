@@ -11,6 +11,8 @@ import game_clear_state
 
 name = "MainState"
 
+voadsf = None
+
 cowboy = None
 sheeps = None
 wolfs = None
