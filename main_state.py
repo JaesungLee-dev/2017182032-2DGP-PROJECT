@@ -49,7 +49,6 @@ def resume():
 
 
 def handle_events():
-    
     global moving_sheep
 
     events = get_events()
@@ -77,6 +76,8 @@ def update():
             if collide(wolf, sheep):
                 sheeps.remove(sheep)
                 game_world.remove_object(sheep)
+
+    sival_anda = 0
 
     for sheep in sheeps:
         if collide(sheep, house):
