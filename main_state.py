@@ -42,7 +42,6 @@ def exit():
     game_world.clear()
 
 def pause():
-    b = 5
     pass
 
 def resume():
