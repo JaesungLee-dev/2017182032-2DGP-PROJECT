@@ -39,7 +39,6 @@ def enter():
     game_world.add_objects(wolfs, 1)
 
 def exit():
-    b = 5
     game_world.clear()
 
 def pause():
