@@ -131,7 +131,7 @@ class Cowboy():
         self.dir = 0
         self.now_dir = 1
         self.speed = 5
-        self.image = load_image('cowboy.png')
+        self.image = load_image('./Resource/cowboy.png')
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)

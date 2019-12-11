@@ -23,7 +23,7 @@ class Wolf():
         self.timer = 0
         self.frame = 0
         if Wolf.image == None:
-            Wolf.image = load_image('monster.png')
+            Wolf.image = load_image('./Resource/monster.png')
         self.target_x, self.target_y = None, None
         self.dir = random.random() * 2 * math.pi
 

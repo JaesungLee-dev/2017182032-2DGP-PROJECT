@@ -11,8 +11,8 @@ logo_time = 0.0
 
 def enter():
     global image, background_image
-    image = load_image('gameover.png')
-    background_image = load_image('Dirt_Field.png')
+    image = load_image('./Resource/gameover.png')
+    background_image = load_image('./Resource/Dirt_Field.png')
 
 
 def exit():

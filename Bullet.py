@@ -12,7 +12,7 @@ class Bullet:
     image = None
     def __init__(self, x = 800, y = 300, direction = 1):
         if Bullet.image == None:
-            Bullet.image = load_image('bullet.png')
+            Bullet.image = load_image('./Resource/bullet.png')
         self.x, self.y, self.dir = x, y, direction
     def draw(self):
         self.image.draw(self.x, self.y,60,60)

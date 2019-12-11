@@ -10,8 +10,8 @@ background_image = None
 
 def enter():
     global image, background_image
-    image = load_image('Result Screen.png')
-    background_image = load_image('Dirt_Field.png')
+    image = load_image('./Resource/Result Screen.png')
+    background_image = load_image('./Resource/Dirt_Field.png')
 
 def exit():
     global image, background_image

@@ -77,8 +77,6 @@ def update():
                 sheeps.remove(sheep)
                 game_world.remove_object(sheep)
 
-    sival_anda = 0
-
     for sheep in sheeps:
         if collide(sheep, house):
             sheeps.remove(sheep)

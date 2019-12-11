@@ -26,7 +26,7 @@ class Sheep():
         self.build_behavior_tree()
 
         if Sheep.image == None:
-            Sheep.image = load_image('llama_walk_0.png')
+            Sheep.image = load_image('./Resource/llama_walk_0.png')
 
     def update(self):
         self.bt.run()
