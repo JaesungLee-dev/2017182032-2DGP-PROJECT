@@ -18,7 +18,7 @@ FRAMES_PER_ACTION = 4
 class Wolf():
     image = None
     def __init__(self):
-        self.x, self.y = random.randint(600,1280), random.randint(0,800)
+        self.x, self.y = random.randint(1300,1500), random.randint(0,800)
         self.speed = RUN_SPEED_PPS
         self.timer = 0
         self.frame = 0
@@ -54,8 +54,8 @@ class Wolf():
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
         self.x += self.speed * math.cos(self.dir) * game_framework.frame_time
         self.y += self.speed * math.sin(self.dir) * game_framework.frame_time
-        self.x = clamp(50, self.x, 1280 - 50)
-        self.y = clamp(50, self.y, 800 - 50)
+        #self.x = clamp(50, self.x, 1280 - 50)
+        #self.y = clamp(50, self.y, 800 - 50)
 
     def wander(self):
         self.speed = RUN_SPEED_PPS

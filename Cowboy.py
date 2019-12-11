@@ -136,7 +136,7 @@ class Cowboy():
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
         self.sound = load_wav('./Resource/gun.wav')
-        self.sound.set_volume(64)
+        self.sound.set_volume(80)
 
 
     def get_bb(self):
