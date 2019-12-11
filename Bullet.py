@@ -14,6 +14,7 @@ class Bullet:
         if Bullet.image == None:
             Bullet.image = load_image('./Resource/bullet.png')
         self.x, self.y, self.dir = x, y, direction
+
     def draw(self):
         self.image.draw(self.x, self.y,60,60)
 

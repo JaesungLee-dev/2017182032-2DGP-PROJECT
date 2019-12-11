@@ -135,6 +135,9 @@ class Cowboy():
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
+        self.sound = load_wav('./Resource/182272__martian__gun-for-loy.wav')
+        self.sound.set_volume(32)
+
 
     def get_bb(self):
         return self.x - 32, self.y - 64, self.x + 32, self.y + 36
@@ -161,6 +164,7 @@ class Cowboy():
             key_event = key_event_table[(event.type, event.key)]
 
             if key_event == SPACE:
+                self.sound.play()
                 self.add_event(key_event)
                 return
 
