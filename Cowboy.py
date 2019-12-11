@@ -135,8 +135,8 @@ class Cowboy():
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
-        self.sound = load_wav('./Resource/182272__martian__gun-for-loy.wav')
-        self.sound.set_volume(32)
+        self.sound = load_wav('./Resource/gun.wav')
+        self.sound.set_volume(64)
 
 
     def get_bb(self):

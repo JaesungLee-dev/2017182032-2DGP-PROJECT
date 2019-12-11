@@ -19,12 +19,18 @@ house = None
 game_clear = None
 safe_sheeps = None
 
+sheep_sound = None
+wolf_sound = None
+
 moving_sheep = True
 
 def enter():
-    global cowboy, sheeps, wolfs, background,house, game_clear, safe_sheeps
+    global cowboy, sheeps, wolfs, background,house, game_clear, safe_sheeps, sheep_sound,wolf_sound
     game_clear = False
     safe_sheeps = 0
+
+    sheep_sound = load_wav('./Resource/sheep.wav')
+    wolf_sound = load_wav('./Resource/wolf.wav')
 
     house = House()
     cowboy = Cowboy(20,64)
@@ -74,6 +80,7 @@ def update():
             game_framework.change_state(game_over_state)
         for sheep in sheeps:
             if collide(wolf, sheep):
+                sheep_sound.play()
                 sheeps.remove(sheep)
                 game_world.remove_object(sheep)
 
@@ -88,11 +95,13 @@ def update():
         for animal in game_world.objects[1]:
             if isinstance(animal,Wolf):
                 if collide(animal, bullet):
+                    wolf_sound.play()
                     wolfs.remove(animal)
                     game_world.remove_object(bullet)
                     game_world.remove_object(animal)
             if isinstance(animal,Sheep):
                 if collide(animal, bullet):
+                    sheep_sound.play()
                     sheeps.remove(animal)
                     game_world.remove_object(bullet)
                     game_world.remove_object(animal)
