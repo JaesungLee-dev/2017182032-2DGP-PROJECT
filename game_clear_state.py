@@ -7,25 +7,29 @@ import main_state
 name = "game_clear_state"
 image = None
 background_image = None
+house_image = None
 
 def enter():
-    global image, background_image
+    global image, background_image, house_image
     image = load_image('./Resource/Result Screen.png')
     background_image = load_image('./Resource/Dirt_Field.png')
+    house_image = load_image('./Resource/House.png')
 
 def exit():
-    global image, background_image
+    global image, background_image,house_image
     del(image)
     del(background_image)
+    del(house_image)
 
 def update():
     pass
 
 def draw():
-    global image, background_image
+    #global image, background_image
     clear_canvas()
 
     background_image.draw(640,400,1280,800)
+    house_image.draw(640,400, 800,600)
 
     if main_state.safe_sheeps == 1:
         image.clip_draw(250,400,190,210,540,400,100,100)
