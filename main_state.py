@@ -18,6 +18,7 @@ background = None
 house = None
 game_clear = None
 safe_sheeps = None
+man_dying = None
 
 timer = None
 
@@ -27,13 +28,14 @@ wolf_sound = None
 moving_sheep = True
 
 def enter():
-    global cowboy, sheeps, wolfs, background,house, game_clear, safe_sheeps, sheep_sound,wolf_sound, timer
+    global cowboy, sheeps, wolfs, background,house, game_clear, safe_sheeps, sheep_sound,wolf_sound, timer,man_dying
     game_clear = False
     safe_sheeps = 0
     timer = 10
 
     sheep_sound = load_wav('./Resource/sheep.wav')
     wolf_sound = load_wav('./Resource/wolf.wav')
+    man_dying = load_wav('./Resource/man_dying.wav')
 
     house = House()
     cowboy = Cowboy(20,64)
@@ -81,14 +83,15 @@ def update():
     if timer > 0:
         timer -= 1
     else:
-        temp_wolfs = [Wolf() for i in range(4)]
+        temp_wolfs = [Wolf() for i in range(5)]
         wolfs += temp_wolfs
         game_world.add_objects(temp_wolfs,1)
-        timer = 3500
+        timer = 3200
 
 
     for wolf in wolfs:
         if collide(wolf,cowboy):
+            man_dying.play()
             game_framework.change_state(game_over_state)
         for sheep in sheeps:
             if collide(wolf, sheep):

@@ -54,11 +54,14 @@ class IdleState:
     @staticmethod
     def exit(cowboy, event):
         if event == SPACE:
+            cowboy.frame = 11
             cowboy.fire_bullet()
 
     @staticmethod
     def do(cowboy):
-        cowboy.frame = 0
+        cowboy.frame = 11
+        pass
+
     @staticmethod
     def draw(cowboy):
         cowboy.image.clip_draw(int(cowboy.frame) * 128, cowboy.action * 128, 128, 128, cowboy.x, cowboy.y)
